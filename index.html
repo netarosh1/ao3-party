@@ -51,7 +51,7 @@ body{
     padding:14px 20px;
 
     font-size:1.15rem;
-    font-weight:bold;
+    font-weight: normal;
     font-family:var(--ao3-serif);
 
 }
@@ -114,6 +114,27 @@ button{
 
     border-top:1px solid #ddd;
 }
+.kudos_notice{
+    background:#d1e1ef;
+    border:1px solid #c2d2df;
+    margin:0.643em auto;
+    padding:0.25em 0.375em;
+    clear:right;
+    box-shadow:inset 1px 1px 2px;
+    border-radius:0.25em;
+    word-wrap:break-word;
+}
+
+.kudos_error{
+    background:#efd1d1;
+    border:1px solid #900;
+    margin:0.643em auto;
+    padding:0.25em 0.375em;
+    clear:right;
+    box-shadow:1px 1px 2px;
+    border-radius:0.25em;
+    word-wrap:break-word;
+}
 </style>
 </head>
 
@@ -167,20 +188,12 @@ const pages = {
 
 
     kudos: `
-        <h2>You left kudos!</h2>
+    <h2>Kudos</h2>
 
-        <p>
-        Your appreciation has been sent to the creator.
-        </p>
+    <div id="kudos-result"></div>
 
-        <p>💙💙💙</p>
-
-        <div class="button-row">
-            <button class="primary">
-            Return to fic
-            </button>
-        </div>
-    `,
+    <p>💙💙💙</p>
+`,
 
 
     door: `
@@ -208,7 +221,48 @@ const pages = {
         <p>
         🔒 Access granted.
         </p>
-    `
+    `,
+    library: `
+    <h2>Work Discovered: The Library</h2>
+
+    <p>
+    You found a hidden chapter in the Archive.
+    </p>
+
+    <p>
+    Tags:
+    </p>
+
+    <ul>
+        <li>Books</li>
+        <li>Quiet Moments</li>
+        <li>Reader Appreciation</li>
+    </ul>
+`,
+
+kitchen: `
+    <h2>Work Discovered: The Kitchen</h2>
+
+    <p>
+    A new work has been added to your collection.
+    </p>
+
+    <p>
+    Tags:
+    </p>
+
+    <ul>
+        <li>Coffee</li>
+        <li>Cake</li>
+        <li>Domestic Fluff</li>
+    </ul>
+`,
+
+collection: `
+    <h2>Your Archive Collection</h2>
+
+    <ul id="collection-list"></ul>
+`,
 };
 
 
@@ -223,7 +277,109 @@ const page = params.get("page") || "home";
 
 document.getElementById("content").innerHTML =
     pages[page] || pages.home;
+// ----------------------
+// KUDOS SYSTEM
+// ----------------------
 
+if(page === "kudos") {
+
+    const notice = document.getElementById("kudos-result");
+
+
+    if(localStorage.getItem("gaveKudos")) {
+
+        notice.className = "kudos_error";
+
+        notice.innerHTML = `
+            You have already left kudos here.
+        `;
+
+
+    } else {
+
+        notice.className = "kudos_notice";
+
+        notice.innerHTML = `
+            Thank you for leaving kudos!
+        `;
+
+        localStorage.setItem("gaveKudos", "true");
+    }
+}
+
+// ----------------------
+// SCAVENGER HUNT
+// ----------------------
+
+const discoveries = {
+    door: "The Door",
+    library: "The Library",
+    kitchen: "The Kitchen",
+    secret: "The Secret Work"
+};
+
+
+if(discoveries[page]) {
+
+    localStorage.setItem(
+        page + "Found",
+        "true"
+    );
+
+}
+
+
+// Collection page
+
+if(page === "collection") {
+
+    let list = "";
+
+    for(let item in discoveries){
+
+        if(localStorage.getItem(item + "Found")){
+
+            list += `
+            <li>
+            ☑ ${discoveries[item]}
+            </li>
+            `;
+
+        } else {
+
+            list += `
+            <li>
+            ☐ ${discoveries[item]}
+            </li>
+            `;
+        }
+    }
+
+
+    document.getElementById("collection-list").innerHTML = list;
+
+
+    const completed =
+        Object.keys(discoveries)
+        .every(item =>
+            localStorage.getItem(item + "Found")
+        );
+
+
+    if(completed){
+
+        document.getElementById("collection-list").innerHTML +=
+        `
+        <br>
+        <strong>
+        🎉 Collection complete!
+        <br>
+        Final work unlocked.
+        </strong>
+        `;
+    }
+
+}
 
 </script>
 </body>
