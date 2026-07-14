@@ -81,7 +81,7 @@ ul{
 }
 
 button{
-        background: #eee;
+    background: #eee;
     color: #444;
     width: auto;
     font-weight: 400;
@@ -150,6 +150,15 @@ a.tag{
     padding:0;
     border-bottom:1px dotted;
 }
+.tags{
+    list-style-type:none;
+    padding-left:0;
+}
+
+.tags li{
+    display:inline;
+    margin-right:0.5em;
+}
 </style>
 </head>
 
@@ -182,7 +191,7 @@ const pages = {
 
         <p><strong>Archive Warnings</strong></p>
 
-        <ul>
+        <ul class="tags">
     <li><a class="tag" href="#">Cake</a></li>
     <li><a class="tag" href="#">Domestic Fluff</a></li>
     <li><a class="tag" href="#">Found Family</a></li>
@@ -222,7 +231,7 @@ const pages = {
     Tags:
     </p>
 
-    <ul>
+    <ul class="tags">
     <li><a class="tag" href="#">Books</a></li>
     <li><a class="tag" href="#">Quiet Moments</a></li>
     <li><a class="tag" href="#">Dark Academia Aesthetic</a></li>
@@ -241,7 +250,7 @@ kitchen: `
     Tags:
     </p>
 
-   <ul>
+   <ul class="tags">
     <li><a class="tag" href="#">Cake</a></li>
     <li><a class="tag" href="#">Sickly Sweet</a></li>
     <li><a class="tag" href="#">Dead Dove: Do Not Eat</a></li>
